@@ -1,0 +1,124 @@
+!Redo tests from section 1.1.3 of Kamin's text using the Pascal-style syntax
+
+3$
+4+7$
+x:=4$
+x+x$
+print x$
+y:=5$
+seq print x; print y; x*y qes$
+if y>0 then 5 else 10 fi$
+while y>0 do
+  seq x:=x+x; y:=y-1 qes
+od$
+x$
+fun #1 (x) := x + 1 nuf$
+#1(4)$
+fun double(x):=x+x nuf$
+double(4)$
+x$
+fun setx(x,y):= seq x:=x+y; x qes nuf$
+setx(x,1)$
+x$
+fun not(boolval):= if boolval then 0 else 1 fi nuf$
+fun ## (x,y):= not(x=y) nuf$
+fun mod(m,n):=m-n*(m/n)nuf$
+fun gcd(m,n):=
+ seq
+  r:=mod(m,n);
+  while ##(r,0) do
+   seq
+    m:=n;
+    n:=r;
+    r:=mod(m,n)
+   qes
+  od;
+  n
+ qes
+nuf$
+gcd(6,15)$
+
+fun gcd(m,n):=
+  if n=0 then m else gcd(n,mod(m,n)) fi nuf$
+gcd(6,15)$
+
+!Normal precedence and associativity are implemented.
+5*3+7$
+5+3*7$
+14-7-3$
+48/12/2$
+
+!Keywords cannot be redefined
+fun if (x) := x+5 nuf$
+if := 20$
+
+!Names may contain any char that is not a delimiter and must
+!not contain only digits.
+!Delimiters = ' ','(',')','+','-','*','/',':','=','<','>',';',',','$','!'
+~12#ab:=25$
+~12#ab$
+x:=15-~12#ab+7$
+
+!A string of digits is not a valid name.
+fun 222  (x) := x+222 nuf$
+
+!Inserting a non-delimiter char into a string of digits makes a valid name.
+fun 222# (x) := x+222 nuf$
+222#(3)$
+x:=100-222#(3)-50$
+
+!Inserting a delimiter in a name causes erroneous results.
+a(b:=25$
+
+!Function name may not be reused as a variable name.
+fun inc10 (x) := x+10 nuf$
+inc10:=25$
+
+!Multiplie assignment
+i:=j:=k:=25$
+i$
+j$
+k$
+
+!ERROR MESSAGE TESTS
+
+fun david(x,+,z):= x+1 nuf$
+fun +++(x):= x+1 nuf$
+abc:=)25$
+
+!The next 4 inputs below test the error checking for invalid load commands.
+!A valid load command inside a file being loaded will abort the program.
+!See chap1_ut.input3 and chap1_ut.input4 for such test cases.
+!But since these are invalid load commands, an error message is printed and
+!the program moves on to the next input. Moving on instead of aborting may
+!not be desirable if the instructions that failed to load were required 
+!for the commands that follow to work correctly.
+!But that is how I decided to implement it for now.
+!
+!An instruction ending with a $ must occur after a comment line before any
+!command is entered. This causes readDollar function to return to readInput
+!function where the right parenthesis that begins a command is checked for.
+!That is the purpose of the two lines below that contain only a $.
+!See the comments in chap1_ut.input3 for a detailed explanation about this.
+!
+$
+)abcdefghi argument$
+)123 mod.txt$
+)average mod.txt$
+
+!Max ARGLENG=40. Arg below has 41 chars.
+$
+)load abcdefghijklmnopqrstuvwxyzabcdefghijklmno$
+
+!Max NAMELENG=20 but the var and function names below have 21 chars.
+print abcdefghijklmnopqrstu$
+fun abcdefghijklmnopqrstu(x):=x+10 nuf$
+
+!MAXDIGITS=19 but value below has 20 digits.
+d:=99999999999999999999$
+
+22:=4$
+mod(100)$
+
+quit$
+

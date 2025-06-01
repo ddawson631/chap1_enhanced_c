@@ -1,0 +1,25 @@
+!Test Cases for exceeding MAXINPUT and MAXNAMES
+
+!Following lines exceed MAXNAMES=28. Builtin names = 26.
+!So third name below is 29th name and triggers the error.
+a:=25$
+b:=100$
+c:=200$
+
+!Following function definition exceeds MAXINPUT=50. This error causes
+!the program to skip the rest of the file and exit. So the function 
+!definition for not2 below is skipped and no error message will appear
+!for it in the result file.
+fun not(boolVal):=
+if boolVal then
+print 0
+else
+print 1
+fi
+nuf$
+
+!Following line exceeds MAXINPUT=50.
+fun not2(boolValue):= if boolValue then 0 else 1 fi nuf$
+
+quit$
+

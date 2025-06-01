@@ -1,0 +1,83 @@
+fun mod(m,n):=m-n*(m/n)nuf$
+mod(100,53)$
+
+fun not(boolval):= 
+  if boolval then 
+  0 
+  else
+  1
+  fi
+nuf$
+not(3)$
+not(0)$
+
+!Load commands cannot occur inside a file being loaded.
+!So the one below causes the program to print an error and quit.
+!The load command below is preceded by a line with a single dollar sign.
+!The reason for this is as follows.
+!
+!The end of input marker for the interpreter is a $.
+!The readInput and readDollar functions read input as follows.
+!readInput displays the main prompt and reads the first input line.
+!If it ends with a $ then the input is complete and the main prompt is
+!redisplayed for the next input.
+!Otherwise it calls readDollar to repeatedly display the continuation prompt
+!and read another line until a $ is read.
+!If EOF occurs then a $ is returned.
+!
+!Consider the above mod function definition.
+!It is on one line ending with a $.
+!So readInput reads that line without calling readDollar.
+!
+!Consider the above not function defintion on multiple lines. 
+!After readInput reads the first line, it reaches eoln without seeing a $.
+!So it calls readDollar to prompt for and read lines until "nuf$" is read.
+!
+!Now consider these comment lines which begin with an exclamation point.
+!When readInput sees an exclamation point, it ignores all chars that follow
+!on that line. So after readInput reads the first comment line, 
+!it reaches eoln without seeing a $. It then calls readDollar to read
+!lines until a $ is reached.
+!
+!The chap1 interpreter accepts three kinds of input:
+! 1. function defintions - such as those for mod and not above
+! 2. expressions - such as the function calls to mod and not above
+! 3. commands - such as the load command below
+!Commands must have a right parenthesis as the first char on the line.
+!
+!The last thing to be aware of is that commands are only checked for
+!in the readInput function, not in the readDollar function.
+!So after readInput displays the main prompt, if it reads a
+!right parenthesis of the load cmd below as the first input char,
+!it knows it must branch away from reading expressions and function defs 
+!to process a command (e.g. to open a file to read more expressions
+!and function definitions from).
+!But if readDollar sees the right parenthesis of the load cmd below
+!as the first char of an input line, it will read it and the chars that 
+!follow as part of an expression or function def and get a syntax error
+!since it does not have the logic to detect and process commands.
+!
+!Now consider what will happen to the following load command which is
+!preceded by a comment line followed by a $ line as shown below.
+!As mentioned earlier, after readInput reads the first comment line,
+!it calls readDollar to keep reading until a $ is reached.
+!So readDollar will be reading all comment lines that follow the
+!the first one above. After it reads the last comment line
+!below, it will read the $ line which will cause it to return
+!to readInput. Since all comment chars were ignored, a line
+!containing only a $ is received as input which is a blank line
+!which is skipped. readinput then reads the right parenthesis
+!and detects and processes the load command.
+!
+!However, in this case the load command is illegal since it is contained
+!in a file. The processCmd logic will recognize that it is already
+!reading from this file and that the command to open and read from
+!another one is invalid. It will issue an error message and quit the program.
+!
+$
+)load gcd_only.txt$
+gcd(51,34)$
+gcd(225,300)$
+
+quit$
+
