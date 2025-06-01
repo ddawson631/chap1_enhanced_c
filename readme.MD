@@ -1,23 +1,20 @@
 # chap1_enhanced_c
 
 ## Introduction
-This repo builds and tests my enhanced version of the chapter 1 interpreter presented in Samuel Kamin's book, [Programming Languages: An Interpreter-Based Approach](https://www.amazon.com/Programming-Languages-Samuel-N-Kamin/dp/0201068249/ref=sr_1_1). The grammar, design and source code for Kamin's original version are described at [chap1_orig](https://github.com/ddawson631/chap1_orig). The enhanced version written in Pascal is described in detail at [chap1_enhanced](https://github.com/ddawson631/chap1_enhanced). And this repo presents the enhanced version rewritten in the C programming language.
+This repo builds and tests a version of my enhanced interpreter that is rewritten in the C programming language. It is based on the one presented in chapter 1 of Samuel Kamin's book, [Programming Languages: An Interpreter-Based Approach](https://www.amazon.com/Programming-Languages-Samuel-N-Kamin/dp/0201068249/ref=sr_1_1). Kamin's original version is described at [chap1_orig](https://github.com/ddawson631/chap1_orig). The enhanced version written in Pascal is described in detail at [chap1_enhanced](https://github.com/ddawson631/chap1_enhanced). This enhanced version written in C is a direct translation from the enhanced version written in Pascal.
 
-My enhancements replaced the original Lisp-style syntax with a Pascal-like syntax and added new commands (load & sload) which allow instructions to be read from a file. But the overall design of the enhanced version is the same as the original.
-It still uses the same data structures and built-in operations as the original. For a good introduction to the overall design, please read Section 1.2, entitled *The Structure of the Interpreter*, in the following document that Professor Kamin kindly provided from his textbook.
+My enhancements replaced the original Lisp-style syntax with a Pascal-like syntax and added new commands (load & sload) which allow instructions to be read from a file. But the overall design of the enhanced interpreter (the C & Pascal version) is the same as the original. It still uses the same data structures and built-in operations as the original. For a good introduction to the overall design, please read Section 1.2, entitled *The Structure of the Interpreter*, in the following document that Professor Kamin kindly provided from his textbook.
 
 - __[Chapter 1](docs/chapter1.pdf)__ - original grammar, syntax, design & documentation
 
-It describes the data structures and functions used in the original source code which it divides into the following 8 sections: DECLARATIONS, DATA STRUCTURE OPS, NAME MANAGEMENT, INPUT, ENVIRONMENTS, NUMBERS, EVALUATION, MAIN. 
+It describes the data structures and functions used in the original source code which it divides into the following 8 sections: DECLARATIONS, DATA STRUCTURE OPS, NAME MANAGEMENT, INPUT, ENVIRONMENTS, NUMBERS, EVALUATION, MAIN. In order to implement my enhancements, I updated the DECLARATIONS, NAME MANAGEMENT, INPUT & MAIN sections and also added a new section entitled NEW PARSING ROUTINES as described at [chap1_enhanced](https://github.com/ddawson631/chap1_enhanced).
 
-In order to implement the enhanced Pascal version, I updated the DECLARATIONS, NAME MANAGEMENT, INPUT & MAIN sections and also added a new section entitled NEW PARSING ROUTINES as described at [chap1_enhanced](https://github.com/ddawson631/chap1_enhanced). The enhanced C version in this repo is a direct translation of that enhanced Pascal version into C.
+The comparison document below describes my translation of the enhanced interpreter from Pascal into C. It first reviews the grammar (Section 1) and instruction syntax (Section 2) which did not change between the Pascal and C versions. Section 3 describes my decisions about some of the translation issues and presents a side-by-side comparison of the Pascal and C source code with some clarifying comments.
 
-The comparison document below reviews the grammar (Section 1) and instruction syntax (Section 2) which are the same for the Pascal and C versions. Section 3 describes my decisions about some of the translation issues and presents a side-by-side comparison of the Pascal and C source code with some clarifying comments.
+- __[Comparison](docs/comparison.pdf)__ - grammar, syntax, C translation decisions, Pascal vs C source code.
 
-- __[Comparison](docs/comparison.pdf)__ - grammar, syntax, C translation decisions, Pascal vs C source code.\
-
-Below is an interactive run, a description of the unit test (UT) strategy, listings of the UT script, run & result, 
-and the Makefile listing. 
+The information below presents an interactive run, description of the Unit Test (UT) script, run & result followed by a
+listing of the Makefile.
 
 ## Interactive Run
 
@@ -134,10 +131,9 @@ The `.rs0` file contains the last saved, validated result from a previous UT run
 When the current and previous results are compared (via diff command), the only differences should be due to new or modified test cases. Unexpected differences must be investigated and corrected if necessary. Once all differences are 
 confirmed to be valid then the `.rs1` file is copied to the `.rs0` file which is then saved as the latest valid result.
 
-
 ## UT Script
 
-The UT cases for the Pascal version were reused and produce the same results in the C version.
+The UT cases for the Pascal version were reused for and produce the same results in the C version.
 I also added new test cases to test the error messages. 
 
 The UT script passes load commands to the interpreter as a Here String as follows.
@@ -149,10 +145,10 @@ It echoes each instruction as it is read then parses and executes it.
 
 The UT script runs the interpreter four times to process the test data in the following four input files. 
 
-`chap1_ut.input1` - tests many valid and invalid instructions
+`chap1_ut.input1` - tests cases for many valid and invalid instructions
 `chap1_ut.input2` - error cases that exceed maximum sizes
-`chap1_ut.input3` - error case: a load command occurs inside a file being loaded - aborts program
-`chap1_ut.input4` - error case: a sload command occurs inside a file being loaded - aborts program
+`chap1_ut.input3` - error case for a load command inside a file being loaded - aborts program
+`chap1_ut.input4` - error case for a sload command inside a file being loaded - aborts program
 
 Below is the listing of the current UT script.
 
@@ -263,7 +259,8 @@ diff -qs ${name}_ut.rs1 ${name}_ut.rs0
 ## UT Run
 
 Below is an example UT run followed by a listing of its result file. 
-Since it reports that the `.rs1` and `.rs0` files are identical, there is no need to copy the `.rs1` to `.rs0` in this case.
+Since the UT script reports that the `.rs1` and `.rs0` files are identical, there is no need to
+copy the `.rs1` to `.rs0` in this case.
 
 ```console
 ~/c/proglang/chap1$ ./chap1_ut.sh
@@ -297,8 +294,9 @@ Files chap1_ut.rs1 and chap1_ut.rs0 are identical
 
 ## UT Result
 
-Below is a listing of the current result file. It tests the examples from the above interactive run then performs the
-additional test cases described below. The comments (lines beginning with an exclamation point) are from the input files. 
+Below is a listing of the current result file. 
+A "Loading file" message is displayed at the beginning of each of the four input files mentioned earlier. 
+The lines that begin with an exclamation point are comments from the input files. 
 
 ```console
 ~/c/proglang/chap1$ cat chap1_ut.rs1
