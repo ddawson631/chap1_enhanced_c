@@ -3,7 +3,7 @@
 ## Introduction
 This repo builds and tests a version of my enhanced interpreter that is rewritten in the C programming language. It is based on the one presented in chapter 1 of Samuel Kamin's book, [Programming Languages: An Interpreter-Based Approach](https://www.amazon.com/Programming-Languages-Samuel-N-Kamin/dp/0201068249/ref=sr_1_1). Kamin's original version is described at [chap1_orig](https://github.com/ddawson631/chap1_orig). The enhanced version written in Pascal is described in detail at [chap1_enhanced](https://github.com/ddawson631/chap1_enhanced). This enhanced version written in C is a direct translation from the enhanced version written in Pascal.
 
-My enhancements replaced the original Lisp-style syntax with a Pascal-like syntax and added new commands (load & sload) which allow instructions to be read from a file. But the overall design of the enhanced interpreter (the C & Pascal version) is the same as the original. It still uses the same data structures and built-in operations as the original. For a good introduction to the overall design, please read Section 1.2, entitled *The Structure of the Interpreter*, in the following document that Professor Kamin kindly provided from his textbook.
+My enhancements replaced the original Lisp-style syntax with a Pascal-like syntax and added new commands (load & sload) which allow instructions to be read from a file. But the overall design of the enhanced interpreter is the same as the original. It still uses the same data structures and built-in operations as the original. For a good introduction to the overall design, please read Section 1.2, entitled *The Structure of the Interpreter*, in the following document that Professor Kamin kindly provided from his textbook.
 
 - __[Chapter 1](docs/chapter1.pdf)__ - original grammar, syntax, design & documentation
 
@@ -11,10 +11,11 @@ It describes the data structures and functions used in the original source code 
 
 The comparison document below describes my translation of the enhanced interpreter from Pascal into C. It first reviews the grammar (Section 1) and instruction syntax (Section 2) which did not change between the Pascal and C versions. Section 3 describes my decisions about some of the translation issues and presents a side-by-side comparison of the Pascal and C source code with some clarifying comments.
 
-- __[Comparison](docs/comparison.pdf)__ - grammar, syntax, C translation decisions, Pascal vs C source code.
+- __[Comparison](docs/comparison.pdf)__ - grammar, syntax, C translation decisions, Pascal vs C source code.\
+      NOTE: If this PDF does not render well on github then please download the corresponding RTF for a better viewing
+      experience offline.
 
-The information below presents an interactive run, description of the Unit Test (UT) script, run & result followed by a
-listing of the Makefile.
+The information below presents an interactive run, Unit Test (UT) description and a listing of the Makefile.
 
 ## Interactive Run
 
