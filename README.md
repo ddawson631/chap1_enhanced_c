@@ -146,9 +146,9 @@ It echoes each instruction as it is read then parses and executes it.
 
 The UT script runs the interpreter four times to process the test data in the following four input files. 
 
-`chap1_ut.input1` - tests cases for many valid and invalid instructions
-`chap1_ut.input2` - error cases that exceed maximum sizes
-`chap1_ut.input3` - error case for a load command inside a file being loaded - aborts program
+`chap1_ut.input1` - tests cases for many valid and invalid instructions\
+`chap1_ut.input2` - error cases that exceed maximum sizes\
+`chap1_ut.input3` - error case for a load command inside a file being loaded - aborts program\
 `chap1_ut.input4` - error case for a sload command inside a file being loaded - aborts program
 
 Below is the listing of the current UT script.
@@ -416,6 +416,24 @@ gcd(6,15)$
 48/12/2$
 2
 
+!relational operators
+5<10$
+1
+
+5>10$
+0
+
+5=5$
+1
+
+10<5$
+0
+
+10<5>-1$
+1
+
+10<5>-1=1$
+1
 
 !Keywords cannot be redefined
 fun if (x) := x+5 nuf$

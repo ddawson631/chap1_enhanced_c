@@ -114,6 +114,26 @@ gcd(6,15)$
 2
 
 
+!relational operators
+5<10$
+1
+
+5>10$
+0
+
+5=5$
+1
+
+10<5$
+0
+
+10<5>-1$
+1
+
+10<5>-1=1$
+1
+
+
 !Keywords cannot be redefined
 fun if (x) := x+5 nuf$
 *****Error parsing function name.  Found if where funid or nameid is expected.

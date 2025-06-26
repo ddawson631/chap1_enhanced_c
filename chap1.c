@@ -1418,17 +1418,16 @@ EXP parseExp3()
     EXPLIST eL;
 
     e1 = parseExp4();
-    if (toksy == lssy || toksy == eqsy || toksy == gtsy)
+    while (toksy == lssy || toksy == eqsy || toksy == gtsy)
     {
         nm = tokindex;
         match(toktable[nm]);
         e2 = parseExp4();
         eL = mkExplist(e2,0);
         eL = mkExplist(e1,eL);
-        return mkAPEXP(nm,eL);
+        e1 = mkAPEXP(nm,eL);
     }
-    else
-        return e1;
+    return e1;
 } // parseExp3
 
 // parse print op
@@ -1640,6 +1639,7 @@ NUMBER applyValueOp (BUILTINOP op, VALUELIST vl)
                 n = 1;
             else
                 n = 0;
+            break;
         case GTOP:
             if (n1 > n2)
                 n = 1;

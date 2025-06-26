@@ -48,6 +48,14 @@ gcd(6,15)$
 14-7-3$
 48/12/2$
 
+!relational operators
+5<10$
+5>10$
+5=5$
+10<5$
+10<5>-1$
+10<5>-1=1$
+
 !Keywords cannot be redefined
 fun if (x) := x+5 nuf$
 if := 20$
