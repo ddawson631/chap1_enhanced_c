@@ -468,7 +468,7 @@ inc10:=25$
 *****Error in match. Found :=  where ( is expected.
 
 
-!Multiplie assignment
+!Multiple assignment
 i:=j:=k:=25$
 25
 
