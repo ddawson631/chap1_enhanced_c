@@ -345,17 +345,17 @@ void prExplist(EXPLIST el)
 // fetchDef - get FUNCTION definition of fname from fundefs
 FUNDEF fetchDef (NAME fname)
 {
-     FUNDEF f;
-     BOOLEAN found;
+    FUNDEF f;
+    BOOLEAN found;
 
-     found = false;
-     f = fundefs;
-     while (f != 0 && !found)
-         if (f->funname == fname)
-             found = true;
-         else
-             f = f->nextfundef;
-     return f;
+    found = false;
+    f = fundefs;
+    while (f != 0 && !found)
+        if (f->funname == fname)
+            found = true;
+        else
+            f = f->nextfundef;
+    return f;
 } // fetchDef
 
 // newDef - add new FUNCTION fname with parameters nl, body e
@@ -1156,31 +1156,31 @@ EXP parseExpr(void); //forward declaration
 // function name is returned as value of a fundef
 NAME parseDef()
 {
-     NAME fname;        // function name
-     NAMELIST nl;       // formal parameters
-     EXP e;             // body
+    NAME fname;        // function name
+    NAMELIST nl;       // formal parameters
+    EXP e;             // body
 
-     match(funsy);      // match "fun" and get next toksy
-     switch (toksy)
-     {
-         case nameidsy:
+    match(funsy);      // match "fun" and get next toksy
+    switch (toksy)
+    {
+        case nameidsy:
             mutate(funidsy);   // set type to funidsy & do case funidsy
-         case funidsy:
+        case funidsy:
             fname = tokindex; // save name index for use below
             match(funidsy);
             break;
-         default:
+        default:
             errmsg(err_function, null_str, null_int);
             break;
-     }
-     match(lparsy);
-     nl = parseParams();
-     match(rparsy);
-     match(assignsy);
-     e = parseExpr();
-     match(nufsy);
-     newDef(fname, nl, e);
-     return fname;
+    }
+    match(lparsy);
+    nl = parseParams();
+    match(rparsy);
+    match(assignsy);
+    e = parseExpr();
+    match(nufsy);
+    newDef(fname, nl, e);
+    return fname;
 } // parseDef
 
 // parse arguments of a function call
