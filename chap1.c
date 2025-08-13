@@ -40,16 +40,16 @@ jmp_buf JL99;
 #define PROMPT2     "> "   // continuation prompt
 #define COMMENTCHAR '!'
 #define SPACE       ' '
-#define DOLLAR      '$'    // marks END of expr or fundef input by user
+#define DOLLAR      '$'    // marks end of expr or fundef input by user
 #define RPAREN      ')'    // marks beginning of a Cmd
 
 typedef short int NAMESIZE;
 typedef char *NAMESTRING;
-typedef short int NAME;
+typedef short int NAME;    // a NAME is an index in printNames array
 
 typedef short int CMDSIZE;
 typedef char *CMDSTRING;
-typedef short int CMD;
+typedef short int CMD;     // a CMD is an index in printCmds array
 
 typedef long NUMBER;
 typedef short int ARGSIZE;
@@ -69,7 +69,7 @@ typedef enum {err_arglist=1, err_function, err_exp6, err_expr, err_cwd,
               err_bad_cmd, err_arg_len, err_no_name, err_name_len,
               err_no_name2, err_digits, err_no_name3, err_mismatch,
               err_not_var, err_num_args, err_undef_func, err_num_args2,
-              err_undef_var, err_undef_op, err_nested_load
+              err_undef_var, err_undef_op, err_nested_load, err_div_zero
              } ERROR_NUM; // error codes passed to errmsg()
 
 typedef struct EXPREC* EXP;
@@ -139,9 +139,9 @@ int null_int = 0;                   // default int passed to errmsg()
 char tokstring[NAMELENG+1];  // token string for display in error messages
 NAMESIZE tokleng;
 
-CMD load,        // load file, echo characters
+CMD load,        // load file and echo characters
     sload,       // silently load file, no echo
-    user;        // print user defined names
+    user;        // print user defined names - for developer use
 
 NAME numNames, numCmds, numBuiltins, tokindex, mulsy_index, 
      // initNames() saves index of first/last ControlOp & ValueOp 
@@ -151,17 +151,18 @@ NAME numNames, numCmds, numBuiltins, tokindex, mulsy_index,
 char infilename[ARGLENG];
 FILE *infp;     // input source file pointer
 
-TOKEN toksy;     // symbolic name of token
+TOKEN toksy;     // current token returned from getToken or install
 TOKEN toktable[MAXNAMES]; // symbolic name of each token in printNames.
+                          // E.g. ifsy for "if", whilesy for "while", etc.
                           // Corresponding toktable & printNames elements
-                          // have same index
+                          // have same index. See initNames().
 
 BOOLEAN quittingtime, // true = exit the program
         eof,          // eof and eoln are used to mimic the boolean
         eoln,         // Pascal functions eof() and eoln().
-        dollarflag,   // true = $ was entered which marks end of input
+        dollarflag,   // true = DOLLAR was entered which marks end of input
         echo,         // true = echo chars during a load command
-        readfile;     // true = an input file is being loaded
+        readfile;     // true = read input from file instead of terminal
 
 void errmsg(ERROR_NUM, char[], int); // forward declaration
 
@@ -576,8 +577,9 @@ char nextchar()
     return c;
 } // nextchar
 
-// readDollar - read char's, ignoring newlines, till '$' is read
-//              '$' marks END of the fundef or expr that is being input
+// readDollar - read char's, ignoring newlines, until DOLLAR is read
+//              display prompts if not reading from file
+//              DOLLAR marks end of fundef or expr being input
 void readDollar()
 {
     char c = SPACE;
@@ -780,9 +782,9 @@ void readInput()
         }
         userinput[pos] = c;
 
-// parse a command or fundef or expression
+// read a command if first char is RPAREN
 
-        if (pos == 0 && c == RPAREN)  // RPAREN begins a cmd (e.g. load or sload)
+        if (pos == 0 && c == RPAREN) 
         {
             processCmd();  //opens file, sets echo
             if (!readfile)
@@ -792,7 +794,8 @@ void readInput()
             }                               
             pos = -1;  //restart userinput index
         }
-        else //parse fundef or expression
+// else read input terminated by dollar sign        
+        else 
         {
             if (userinput[pos] == DOLLAR)
                 dollarflag = true;
@@ -801,11 +804,11 @@ void readInput()
         }
     } while (!dollarflag);
 
-    inputleng = pos; // pos of '$' is length of input in 0 to pos-1
+    inputleng = pos; // pos of DOLLAR is length of input in 0 to pos-1
 
     //remove LF and any other chars that follow dollar sign from input buffer
     while (!eoln)
-        c = nextchar(); // sets eoln true on LF & returns SPACE
+        c = nextchar(); // nextchar sets eoln true on LF & returns SPACE
 } // readInput
 
 // reader - read char's into userinput; be sure input is not blank
@@ -815,9 +818,9 @@ void reader()
     {
         readInput();                  // read input into userinput array
         pos = skipblanks(0);          // advance to first non-blank
-        if (userinput[pos] == DOLLAR) // if it is '$' then
-            inputleng = 0;           // it is a blank line
-    } while (inputleng == 0); // ignore blank lines
+        if (userinput[pos] == DOLLAR) // if it is DOLLAR then
+            inputleng = 0;            // it is a blank line
+    } while (inputleng == 0);         // ignore blank lines
 } // reader
 
 NAME install(char *); // forward declaration
@@ -1049,6 +1052,10 @@ void errmsg(ERROR_NUM errnum, char err_str[], int err_int)
             printf("Remove the load command for file %s", err_str);
             quittingtime = true;
             fclose(infp);
+            break;
+        case err_div_zero:
+            printf("applyValueOp: attempted to divide by zero");
+            break;
         default:
             break;
     }
@@ -1626,6 +1633,8 @@ NUMBER applyValueOp (BUILTINOP op, VALUELIST vl)
             n = n1 * n2;
             break;
         case DIVOP:
+            if (n2 == 0)
+                errmsg(err_div_zero, null_str, null_int);
             n = n1 / n2;
             break;
         case EQOP:
