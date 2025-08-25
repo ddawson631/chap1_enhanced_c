@@ -823,8 +823,6 @@ void reader()
     } while (inputleng == 0);         // ignore blank lines
 } // reader
 
-NAME install(char *); // forward declaration
-
 // parseName - return (installed) NAME starting at userinput[pos]
 NAME parseName()
 {
@@ -1606,8 +1604,6 @@ int arity (BUILTINOP op)
     else 
         return 1;
 } // arity
-
-void prName(NAME);  // forward declaration
 
 // applyValueOp - apply operator to arguments in VALUELIST
 NUMBER applyValueOp (BUILTINOP op, VALUELIST vl)
