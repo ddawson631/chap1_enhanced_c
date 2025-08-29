@@ -1103,8 +1103,8 @@ void getToken()
 } // getToken
 
 // mutate - Change type of toksy in toktable to newtype.
-//  This function is currently used to redefine a variable name (nameidsy)
-//  as a function name (funidsy)
+// A name is initially installed with type nameidsy. See install().
+// If it is part of a fundef then mutate is called to set its type to funidsy.
 void mutate(TOKEN newtype)
 {
     if (toksy != nameidsy && toksy != funidsy)
