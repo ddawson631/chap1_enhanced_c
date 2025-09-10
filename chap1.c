@@ -1,7 +1,7 @@
 /*****************************************************************
  *                     DECLARATIONS                              *
  *****************************************************************/
-#define _POSIX_C_SOURCE 200809L
+#define _POSIX_C_SOURCE 200809L //for PATH_MAX
 #include <stdio.h>
 #include <stddef.h>
 #include <string.h>
