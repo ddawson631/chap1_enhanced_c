@@ -485,10 +485,11 @@ NAME install(char *nm)
     {
         if (i == MAXNAMES)
             errmsg(err_max_names, null_str, null_int);
-        printNames[i] = malloc(sizeof(char *));  //alloc memory for a ptr to char 
+        //insert new name
+        printNames[i] = malloc(strlen(nm) + 1);
         numNames = i + 1;
-        strcpy(printNames[i], nm);  //insert name in printNames
-        toktable[i] = nameidsy;     //set its type in toktable
+        strcpy(printNames[i], nm);
+        toktable[i] = nameidsy;    //set its type in toktable
     }
     toksy = toktable[i];   //save current token symbol type 
 
@@ -1705,7 +1706,7 @@ NUMBER applyUserFun (NAME nm, VALUELIST actuals)
 // applyCtrlOp - apply CONTROLOP op to args in rho
 NUMBER applyCtrlOp (BUILTINOP op, EXPLIST args, ENV rho)
 {
-    NUMBER n;
+    NUMBER n=0;
 
     switch (op)
     {
@@ -1751,7 +1752,7 @@ NUMBER applyCtrlOp (BUILTINOP op, EXPLIST args, ENV rho)
 NUMBER eval (EXP e, ENV rho)
 {
     BUILTINOP op;
-    NUMBER n;
+    NUMBER n=0;
 
     switch (e->etype)
     {
