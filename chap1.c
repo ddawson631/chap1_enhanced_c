@@ -1,6 +1,6 @@
-/*****************************************************************
- *                     DECLARATIONS                              *
- *****************************************************************/
+//---------------------------
+//       DECLARATIONS 
+//---------------------------
 #define _POSIX_C_SOURCE 200809L //for PATH_MAX
 #include <stdio.h>
 #include <stddef.h>
@@ -1306,7 +1306,7 @@ EXP parseSeq()
    exp3 −→ exp4 [ relop exp4 ]*
    exp4 −→ exp5 [ addop exp5 ]*
    exp5 −→ [ addop ] exp6 [ mulop exp6 ]*
-   exp6 −→ name | integer | funcall | ( expr )
+   exp6 −→ name | number | funcall | ( expr )
 
    The recursive structure of these rules yields the following precedence from
    lowest to highest:
@@ -1316,13 +1316,13 @@ EXP parseSeq()
      relop
      addop
      unary addop, mulop
-     variable name, integer, function call, expression in parentheses
+     variable name, number, function call, expression in parentheses
 
    Since the functions call each other recursively, they are implemented in 
    reverse order below to avoid forward declarations.
 */
 
-// parse variable name, integer, parenthesized expr, function call
+// parse variable name, number, parenthesized expr, function call
 EXP parseExp6()
 {
     EXP ex;
