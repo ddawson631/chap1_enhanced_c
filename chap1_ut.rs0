@@ -67,6 +67,9 @@ x$
 fun not(boolval):= if boolval then 0 else 1 fi nuf$
 not
 
+fun <> (x,y):= not(x=y) nuf$
+*****Error parsing function name.  Found < where funid or nameid is expected.
+
 fun ## (x,y):= not(x=y) nuf$
 ##
 

@@ -21,6 +21,7 @@ fun setx(x,y):= seq x:=x+y; x qes nuf$
 setx(x,1)$
 x$
 fun not(boolval):= if boolval then 0 else 1 fi nuf$
+fun <> (x,y):= not(x=y) nuf$
 fun ## (x,y):= not(x=y) nuf$
 fun mod(m,n):=m-n*(m/n)nuf$
 fun gcd(m,n):=
