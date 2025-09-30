@@ -146,6 +146,53 @@ gcd(6,15)$
 7
 
 
+!Unary plus and minus
+10--5$
+15
+
+10++5$
+15
+
+10+-5$
+5
+
+10-+5$
+5
+
+10---5$
+*****Error parsing exp6.  Found - where nameid, funid, "(", or a number is expected.
+
+10+++5$
+*****Error parsing exp6.  Found + where nameid, funid, "(", or a number is expected.
+
+10-+--+5$
+*****Error parsing exp6.  Found - where nameid, funid, "(", or a number is expected.
+
+
+!Valid number range
+!max positive number
+max:=+9223372036854775807$
+9223372036854775807
+
+!min negative number
+min:=-9223372036854775808$
+-9223372036854775808
+
+max+min$
+-1
+
+!Max digits is 19. Following value has 20 digits.
+d:=99999999999999999999$
+*****parseVal: Max digits allowed in 64 bit signed long is 19
+
+!Numbers that go outside of above min to max range in calculations will wrap around.
+d:=max+1$
+-9223372036854775808
+
+d:=min-1$
+9223372036854775807
+
+
 !Keywords cannot be redefined
 fun if (x) := x+5 nuf$
 *****Error parsing function name.  Found if where funid or nameid is expected.

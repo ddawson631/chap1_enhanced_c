@@ -60,6 +60,27 @@ gcd(6,15)$
 5*3>2+2$
 5*(3>2)+2$
 
+!Unary plus and minus
+10--5$
+10++5$
+10+-5$
+10-+5$
+10---5$
+10+++5$
+10-+--+5$
+
+!Valid number range
+!max positive number
+max:=+9223372036854775807$
+!min negative number
+min:=-9223372036854775808$
+max+min$
+!Max digits is 19. Following value has 20 digits.
+d:=99999999999999999999$
+!Numbers that go outside of above min to max range in calculations will wrap around.
+d:=max+1$
+d:=min-1$
+
 !Keywords cannot be redefined
 fun if (x) := x+5 nuf$
 if := 20$
