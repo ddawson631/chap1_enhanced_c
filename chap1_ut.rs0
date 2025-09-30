@@ -448,21 +448,46 @@ $
 *****Load commands cannot occur inside a file being loaded.
 *****Remove the load command for file gcd_only.txt
 
-./chap1 <<< ")sload chap1_ut.input4"
+./chap1 <<< ")load chap1_ut.input4"
 -> 
 Current Directory is: /home/dawsond/c/proglang/chap1
  Loading file : chap1_ut.input4
 
+fun mod(m,n):=m-n*(m/n)nuf$
 mod
 
+mod(100,53)$
 47
 
+
+fun not(boolval):= 
+  if boolval then 
+  0 
+  else
+  1
+  fi
+nuf$
 not
 
+not(3)$
 0
 
+not(0)$
 1
 
+
+!
+!Load commands cannot occur inside a file being loaded.
+!So the sload below causes the program to print an error and quit.
+!The line before the sload contains a single dollar sign.
+!This causes the readDollar function to return to readInput function
+!where the right parenthesis that begins a command is checked for
+!so that the sload will be processed as a command and not an as an erroneous
+!variable name.
+!See the comments in chap1_ut.input3 for a detailed explanation about this.
+!
+$
+)sload gcd_only.txt$
 *****Load commands cannot occur inside a file being loaded.
 *****Remove the load command for file gcd_only.txt
 

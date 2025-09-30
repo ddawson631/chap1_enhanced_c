@@ -45,13 +45,12 @@ echo -e "./$name <<< \")load ${name}_ut.input3\""
 ./$name <<< ")load ${name}_ut.input3" 
 } >> ${name}_ut.rs1 2>&1
 
-echo -e "Nested sload test: Use sload command to read a file containing a sload command."
-echo -e "We get same result as with load command above except that sload (silent load)"
-echo -e "does not echo the commands and all the comments."
+echo -e "Nested sload test: Use load command to read a file containing a sload command."
+echo -e "An error will be displayed and the program aborts"
 echo -e "Running Nested sload test and appending results to ${name}_ut.rs1.\n"
 {
-echo -e "./$name <<< \")sload ${name}_ut.input4\""
-./$name <<< ")sload ${name}_ut.input4" 
+echo -e "./$name <<< \")load ${name}_ut.input4\""
+./$name <<< ")load ${name}_ut.input4" 
 } >> ${name}_ut.rs1 2>&1
 
 
