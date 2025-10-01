@@ -260,6 +260,8 @@ k$
 
 !ERROR MESSAGE TESTS
 
+!Syntax Errors
+
 fun david(x,+,z):= x+1 nuf$
 *****Error parsing arglist.  Found + where ")" or nameid is expected.
 
@@ -268,6 +270,78 @@ fun +++(x):= x+1 nuf$
 
 abc:=)25$
 *****Error parsing exp6.  Found ) where nameid, funid, "(", or a number is expected.
+
+
+!Max NAMELENG=20 but the var and function names below have 21 chars.
+abcdefghijklmnopqrstu+77-10/0+33-abc*8$
+*****Name exceeds 20 chars, begins: abcdefghijklmnopqrst
+
+fun abcdefghijklmnopqrstu(x):=x+10 nuf$
+*****Name exceeds 20 chars, begins: abcdefghijklmnopqrst
+
+
+!lhs of an assignment must be a name
+22:=4$
+*****parseExp1: left hand side of assignment must be a variable
+
+
+!Multiple syntax errors in a single input.
+!First is reported, others skipped as parser resynchronizes with next $.
+!Value of ijk is not changed.
+ijk:=33$
+33
+
+ijk:=50-sum(10,*)+25-4*3+sum(*,15)-48/4+)load bad_data.txt$
+*****Undefined variable: sum
+
+ijk$
+33
+
+
+
+!Semantic Errors
+
+!Wrong number of arguments to mod()
+c:=17-10-mod(100)+25*3$
+*****Wrong number of arguments to: mod
+
+c$
+*****Undefined variable: c
+
+
+!Division by zero.
+10/0$
+*****applyValueOp: attempted to divide by zero
+
+a:=17-10/0+25*3$
+*****applyValueOp: attempted to divide by zero
+
+a$
+*****Undefined variable: a
+
+
+!Undefined function
+b:=33$
+33
+
+b:=25-10+square(3)-5$
+*****Undefined variable: square
+
+b$
+33
+
+
+!Three semantic errors (1 undef var & 2 div by 0) in a single input.
+!Only first is reported.
+c:=xyz+25-10/0-3*5+10/0-8*3$
+*****Undefined variable: xyz
+
+c$
+*****Undefined variable: c
+
+
+c:=xyz+25-10/0-3*5+10/0-8*3-sum(10,*)$
+*****Undefined variable: xyz
 
 
 !The next 4 inputs below test the error checking for invalid load commands.
@@ -300,26 +374,6 @@ $
 $
 )load abcdefghijklmnopqrstuvwxyzabcdefghijklmno$
 *****Argument name exceeds 40 chars, begins: abcdefghijklmnopqrstuvwxyzabcdefghijklmn
-
-
-!Max NAMELENG=20 but the var and function names below have 21 chars.
-print abcdefghijklmnopqrstu$
-*****Name exceeds 20 chars, begins: abcdefghijklmnopqrst
-
-fun abcdefghijklmnopqrstu(x):=x+10 nuf$
-*****Name exceeds 20 chars, begins: abcdefghijklmnopqrst
-
-
-!MAXDIGITS=19 but value below has 20 digits.
-d:=99999999999999999999$
-*****parseVal: Max digits allowed in 64 bit signed long is 19
-
-
-22:=4$
-*****parseExp1: left hand side of assignment must be a variable
-
-mod(100)$
-*****Wrong number of arguments to: mod
 
 
 quit$

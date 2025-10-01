@@ -115,9 +115,49 @@ k$
 
 !ERROR MESSAGE TESTS
 
+!Syntax Errors
+
 fun david(x,+,z):= x+1 nuf$
 fun +++(x):= x+1 nuf$
 abc:=)25$
+
+!Max NAMELENG=20 but the var and function names below have 21 chars.
+abcdefghijklmnopqrstu+77-10/0+33-abc*8$
+fun abcdefghijklmnopqrstu(x):=x+10 nuf$
+
+!lhs of an assignment must be a name
+22:=4$
+
+!Multiple syntax errors in a single input.
+!First is reported, others skipped as parser resynchronizes with next $.
+!Value of ijk is not changed.
+ijk:=33$
+ijk:=50-sum(10,*)+25-4*3+sum(*,15)-48/4+)load bad_data.txt$
+ijk$
+
+
+!Semantic Errors
+
+!Wrong number of arguments to mod()
+c:=17-10-mod(100)+25*3$
+c$
+
+!Division by zero.
+10/0$
+a:=17-10/0+25*3$
+a$
+
+!Undefined function
+b:=33$
+b:=25-10+square(3)-5$
+b$
+
+!Three semantic errors (1 undef var & 2 div by 0) in a single input.
+!Only first is reported.
+c:=xyz+25-10/0-3*5+10/0-8*3$
+c$
+
+c:=xyz+25-10/0-3*5+10/0-8*3-sum(10,*)$
 
 !The next 4 inputs below test the error checking for invalid load commands.
 !A valid load command inside a file being loaded will abort the program.
@@ -142,16 +182,6 @@ $
 !Max ARGLENG=40. Arg below has 41 chars.
 $
 )load abcdefghijklmnopqrstuvwxyzabcdefghijklmno$
-
-!Max NAMELENG=20 but the var and function names below have 21 chars.
-print abcdefghijklmnopqrstu$
-fun abcdefghijklmnopqrstu(x):=x+10 nuf$
-
-!MAXDIGITS=19 but value below has 20 digits.
-d:=99999999999999999999$
-
-22:=4$
-mod(100)$
 
 quit$
 
